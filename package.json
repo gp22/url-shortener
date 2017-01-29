@@ -18,6 +18,7 @@
   "homepage": "https://github.com/gp22/url-shortener#readme",
   "dependencies": {
     "ejs": "^2.5.5",
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "valid-url": "^1.0.9"
   }
 }
