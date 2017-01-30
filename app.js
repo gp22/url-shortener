@@ -100,11 +100,13 @@ function getShortUrl(url) {
     //     return urls[url];
     // }
 
-    ShortUrl.find({original_url: url}, function(err, shorturl) {
+    ShortUrl.findOne({original_url: url}, function(err, shorturl) {
         if (err) {
             console.error(err);
-        } else {
+        } else if (shorturl !== null) {
             console.log(shorturl);
+        } else {
+            console.log(url, 'not in db');
         }
     });
 };
