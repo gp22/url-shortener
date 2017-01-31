@@ -13,11 +13,6 @@ mongoose.connect(uri);
 
 app.set('view engine', 'ejs');
 
-// to be removed VERY SOON!
-// var urls = {};
-// var shortUrls = {};
-// var count = 1;
-
 var shortUrlSchema = new mongoose.Schema({
     _id: Number,
     original_url: String
@@ -50,7 +45,7 @@ app.get('/new/*', function(req, res) {
         res.send(response);
     } else {
         response["error"] =
-        'Invalid URL: Use the format http(s)://www.example.com';
+            'Invalid URL: Use the format http(s)://www.example.com';
         res.send(response);
     }
 });
@@ -128,10 +123,16 @@ function getNextCount() {
     //         console.log(nextCount.sequenceValue);
     //     }
     // });
-    Counter.findOneAndUpdate({}, { $inc: { sequenceValue: 1 } });
 };
 
-getNextCount();
+Counter.findOneAndUpdate({}, { $inc: { sequenceValue: 1 } },
+    function(err, result) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result.sequenceValue);
+        }
+    });
 
 // ShortUrl.create({
 //     _id: 1,
