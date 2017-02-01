@@ -4,6 +4,11 @@ var validUrl = require('valid-url');
 var mongoose = require('mongoose');
 
 const uri = process.env.MLAB_URI;
+
+console.log('**************************')
+console.log('uri:', process.env.MLAB_URI);
+console.log('**************************')
+
 const APPURL = 'https://gp22-shorturl.herokuapp.com/';
 
 mongoose.connect(uri);
