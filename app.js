@@ -85,17 +85,23 @@ app.get('/new/*', function(req, res) {
 app.get('/:shorturl', function(req, res) {
     // route used to redirect to shortened url
     var shorturl = req.params.shorturl;
+    var response = {};
 
-    ShortUrl.findOne({ _id: shorturl }, function(err, response) {
+    if (!Number(shorturl)) {
+        response["error"] = 'URL not in database';
+        res.send(response);
+        return;
+    }
+
+    ShortUrl.findOne({ _id: shorturl }, function(err, result) {
         if (err) {
             console.error(err);
-        } else if (response !== null) {
+        } else if (result !== null) {
             // shorturl exists in db, redirect to it
-            var redirect = response.original_url;
+            var redirect = result.original_url;
             res.redirect(redirect);
         } else {
             // shorturl not in db, send error response
-            var response = {};
             response["error"] = 'URL not in database';
             res.send(response);
         }
