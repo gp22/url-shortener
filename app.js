@@ -37,51 +37,52 @@ app.get('/new/*', function(req, res) {
     var response = {};
     var url = req.params[0];
 
-    if (validUrl.isUri(url)) {
-        // check if url exists in db
-        ShortUrl.findOne({ original_url: url }, function(err, shorturl) {
-            if (err) {
-                console.error(err);
-            } else if (shorturl !== null) {
-                // url exists in db, use it to create response
-                response["original_url"] = shorturl.original_url;
-                var shorturlString = shorturl._id.toString();
-                response["short_url"] = APPURL + shorturlString;
-
-                res.send(response);
-            } else {
-                // url not in db, create it using the next Counter value
-                Counter.findOneAndUpdate({}, { $inc: { sequenceValue: 1 } },
-                    function(err, result) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            ShortUrl.create({
-                                _id: result.sequenceValue,
-                                original_url: url
-                            }, function(err, shortUrl) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    // short url successfully created
-                                    // use it to create response
-                                    response["original_url"] = shortUrl.original_url;
-                                    var shorturlString = shortUrl._id.toString();
-                                    response["short_url"] = APPURL + shorturlString;;
-
-                                    res.send(response);
-                                }
-                            });
-                        }
-                    });
-            }
-        });
-    } else {
+    if (!validUrl.isWebUri(url)) {
         // provided url is invalid
         response["error"] =
             'Invalid URL: Use the format http(s)://www.example.com';
         res.send(response);
+        return;
     }
+
+    // check if url exists in db
+    ShortUrl.findOne({ original_url: url }, function(err, shorturl) {
+        if (err) {
+            console.error(err);
+        } else if (shorturl !== null) {
+            // url exists in db, use it to create response
+            response["original_url"] = shorturl.original_url;
+            var shorturlString = shorturl._id.toString();
+            response["short_url"] = APPURL + shorturlString;
+
+            res.send(response);
+        } else {
+            // url not in db, create it using the next Counter value
+            Counter.findOneAndUpdate({}, { $inc: { sequenceValue: 1 } },
+                function(err, result) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        ShortUrl.create({
+                            _id: result.sequenceValue,
+                            original_url: url
+                        }, function(err, shortUrl) {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                // short url successfully created
+                                // use it to create response
+                                response["original_url"] = shortUrl.original_url;
+                                var shorturlString = shortUrl._id.toString();
+                                response["short_url"] = APPURL + shorturlString;;
+
+                                res.send(response);
+                            }
+                        });
+                    }
+                });
+        }
+    });
 });
 
 app.get('/:shorturl', function(req, res) {
