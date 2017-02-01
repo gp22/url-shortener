@@ -3,11 +3,8 @@ var app = express();
 var validUrl = require('valid-url');
 var mongoose = require('mongoose');
 
-const HOSTNAME = 'localhost';
-const PORT = 3000;
-const DBNAME = 'shorturls';
-const uri = 'mongodb://' + HOSTNAME + '/' + DBNAME;
-const APPURL = HOSTNAME + ':' + PORT + '/';
+const uri = process.env.MLAB_URI;
+const APPURL = 'https://gp22-shorturl.herokuapp.com/';
 
 mongoose.connect(uri);
 
@@ -109,14 +106,3 @@ app.get('/:shorturl', function(req, res) {
 app.listen(process.env.PORT || 3000, function() {
     console.log('Server started');
 });
-
-// Counter.create({
-//     _id: 2
-// }, function(err, shortUrl) {
-//     if(err) {
-//         console.error('ERROR');
-//     } else {
-//         console.log('Counter created');
-//         console.log(shortUrl);
-//     }
-// });
