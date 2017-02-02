@@ -13,7 +13,15 @@ const uri = process.env.MLAB_URI;
 // console.log('uri:', process.env.MLAB_URI);
 
 // This is the URL that will be used to create the short url JSON responses
+// Comment it out when using the following const values for local testing
 const APPURL = 'https://gp22-shorturl.herokuapp.com/';
+
+// Use these const values for local testing
+// const HOSTNAME = 'localhost';
+// const PORT = 3000;
+// const DBNAME = 'shorturls';
+// const uri = 'mongodb://' + HOSTNAME + '/' + DBNAME;
+// const APPURL = HOSTNAME + ':' + PORT + '/';
 
 mongoose.connect(uri);
 
