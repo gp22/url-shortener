@@ -76,7 +76,7 @@ app.get('/new/*', function(req, res) {
                                 // use it to create response
                                 response["original_url"] = shortUrl.original_url;
                                 var shorturlString = shortUrl._id.toString();
-                                response["short_url"] = APPURL + shorturlString;;
+                                response["short_url"] = APPURL + shorturlString;
 
                                 res.send(response);
                             }
