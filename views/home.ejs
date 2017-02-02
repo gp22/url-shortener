@@ -1,11 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>URL Shortener</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-</head>
-<body>
-<h1>URL Shortener Microservice</h1>
+<% include partials/header %>
 
-</body>
-</html>
+<div class='header center-align z-depth-2'>
+    <h1>URL Shortener Microservice</h1>
+</div>
+
+<div class='container'>
+
+<div class='subhead'>
+    <p>The URL shortener microservice performs a very simple function when it is passed a URL (example: https://www.google.com) as a parameter:</p>
+</div>
+<div class='description'>
+    <p>It will generate a shortened version of the URL in JSON format (example: https://gp22-shorturl.herokuapp.com/1000).</p>
+    <br>
+    <p>When you enter the short version of the URL into your web browsers address bar it will redirect you to your original URL.</p>
+    <br>
+    <p>If you enter either an invalid URL or an invalid short URL it will respond with an error in JSON format.</p>
+    <br>
+    <p>One thing about this app that I think is really funny is that the short URLs it generates for you are often longer than the actual URL! But it was a fun app to build either way!</p>
+</div>
+
+<div class='example'>
+  <h2>Example to create a new short URL</h2>
+</div>
+
+<div class='code'>
+<pre>
+https://gp22-shorturl.herokuapp.com/new/https://www.google.com
+</pre>
+</div>
+
+<div class='example'>
+    <h2>Example response</h2>
+</div>
+
+<div class='code'>
+<pre>
+{ "original_url": "https://www.google.com", "short_url": "https://gp22-shorturl.herokuapp.com/1000" }
+</pre>
+</div>
+
+<div class='example'>
+    <h2>Example usage</h2>
+</div>
+
+<div class='code'>
+<pre>
+https://gp22-shorturl.herokuapp.com/1000
+</pre>
+</div>
+
+<div class='example'>
+    <h2>Redirects to</h2>
+</div>
+
+<div class='code'>
+<pre>
+https://www.google.com
+</pre>
+</div>
+
+</div>
+
+<div class='footer center-align z-depth-2'>
+    <!-- <h3>gp22</h3> -->
+</div>
+
+<% include partials/footer %>

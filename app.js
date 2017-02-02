@@ -17,6 +17,7 @@ const APPURL = 'https://gp22-shorturl.herokuapp.com/';
 
 mongoose.connect(uri);
 
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // Define schemas for the format of the db records
