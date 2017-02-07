@@ -23,10 +23,10 @@ https://www.google.com
 */
 'use strict';
 
-var express = require('express');
-var app = express();
-var validUrl = require('valid-url');
-var mongoose = require('mongoose');
+const express = require('express');
+const app = express();
+const validUrl = require('valid-url');
+const mongoose = require('mongoose');
 
 /*
 Use the heroku environment variable MLAB_URI to store the db name and login
@@ -54,21 +54,19 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // Define schemas for the format of the db records
-var shortUrlSchema = new mongoose.Schema({
+const shortUrlSchema = new mongoose.Schema({
     _id: Number,
     original_url: String
 });
 
-var counterSchema = new mongoose.Schema({
+const counterSchema = new mongoose.Schema({
     sequenceValue: Number
 });
 
-var Counter = mongoose.model('Counter', counterSchema);
-var ShortUrl = mongoose.model('ShortUrl', shortUrlSchema);
+const Counter = mongoose.model('Counter', counterSchema);
+const ShortUrl = mongoose.model('ShortUrl', shortUrlSchema);
 
-app.get('/', function(req, res) {
-    res.render('home');
-});
+app.get('/', (req, res) => res.render('home'));
 
 app.get('/new/*', function(req, res) {
     /*
@@ -80,8 +78,8 @@ app.get('/new/*', function(req, res) {
     to create the response
     It sends all responses in JSON
     */
-    var response = {};
-    var url = req.params[0];
+    let response = {};
+    const url = req.params[0];
 
     if (!validUrl.isWebUri(url)) {
         // provided url is invalid
@@ -92,34 +90,34 @@ app.get('/new/*', function(req, res) {
     }
 
     // check if url exists in db
-    ShortUrl.findOne({ original_url: url }, function(err, shorturl) {
+    ShortUrl.findOne({ original_url: url }, (err, shorturl) => {
         if (err) {
             console.error(err);
         } else if (shorturl !== null) {
             // url exists in db, use it to create response
             response["original_url"] = shorturl.original_url;
-            var shorturlString = shorturl._id.toString();
+            let shorturlString = shorturl._id.toString();
             response["short_url"] = APPURL + shorturlString;
 
             res.send(response);
         } else {
             // url not in db, create it using the next Counter value
             Counter.findOneAndUpdate({}, { $inc: { sequenceValue: 1 } },
-                function(err, result) {
+                (err, result) => {
                     if (err) {
                         console.error(err);
                     } else {
                         ShortUrl.create({
                             _id: result.sequenceValue,
                             original_url: url
-                        }, function(err, shortUrl) {
+                        }, (err, shortUrl) => {
                             if (err) {
                                 console.error(err);
                             } else {
                                 // short url successfully created
                                 // use it to create response
                                 response["original_url"] = shortUrl.original_url;
-                                var shorturlString = shortUrl._id.toString();
+                                let shorturlString = shortUrl._id.toString();
                                 response["short_url"] = APPURL + shorturlString;
 
                                 res.send(response);
@@ -131,7 +129,7 @@ app.get('/new/*', function(req, res) {
     });
 });
 
-app.get('/:shorturl', function(req, res) {
+app.get('/:shorturl', (req, res) => {
     /*
     This route is used to redirect to the shortened url
     First it makes sure the provided parameter is actually a number
@@ -141,8 +139,8 @@ app.get('/:shorturl', function(req, res) {
     If not, it sends and error response in JSON
     */
 
-    var shorturl = req.params.shorturl;
-    var response = {};
+    const shorturl = req.params.shorturl;
+    let response = {};
 
     if (!Number(shorturl)) {
         response["error"] = 'URL not in database';
@@ -150,12 +148,12 @@ app.get('/:shorturl', function(req, res) {
         return;
     }
 
-    ShortUrl.findOne({ _id: shorturl }, function(err, result) {
+    ShortUrl.findOne({ _id: shorturl }, (err, result) => {
         if (err) {
             console.error(err);
         } else if (result !== null) {
             // shorturl exists in db, redirect to it
-            var redirect = result.original_url;
+            const redirect = result.original_url;
             res.redirect(redirect);
         } else {
             // shorturl not in db, send error response
@@ -166,6 +164,4 @@ app.get('/:shorturl', function(req, res) {
 });
 
 // use process.env.PORT for compatibility with heroku
-app.listen(process.env.PORT || 3000, function() {
-    console.log('Server started');
-});
+app.listen(process.env.PORT || 3000, () => console.log('Server started'));
